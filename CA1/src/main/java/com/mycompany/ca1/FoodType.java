@@ -9,7 +9,7 @@ package com.mycompany.ca1;
  * @author rafae
  */
 public enum FoodType {
-    
+    //test
     BURGER("Burger"),
     PIZZA("Pizza"),
     FRIES("Fries"),
