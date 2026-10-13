@@ -14,9 +14,8 @@ import java.time.LocalDateTime;
 public class CA1 {
 
 
-public class FoodStorage {
-
     public static void main(String[] args) {
+
 
         Scanner sc = new Scanner(System.in);
 
@@ -65,7 +64,10 @@ public class FoodStorage {
         }
 
         sc.close();
+
+        System.out.println("Hello World!"); //prompt
+
     }
 }
 
-}
+
