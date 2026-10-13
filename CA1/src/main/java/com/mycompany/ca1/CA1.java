@@ -65,7 +65,7 @@ public class CA1 {
 
         sc.close();
 
-        System.out.println("Hello World!"); //prompt
+       
 
     }
 }
