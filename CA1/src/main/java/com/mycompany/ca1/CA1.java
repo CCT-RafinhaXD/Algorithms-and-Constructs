@@ -36,6 +36,15 @@ public class CA1 {
             System.out.print("Weight (grams): ");
             storage[i][1] = sc.nextLine();
 
+        //declare the variable for expiry date initializing it from today.
+        LocalDate expiryDate = LocalDate.now();
+        
+        //set the valid date as false so user can set it inside of the loop
+        boolean validDate = false;
+
+        //implemented a while loop for expiry date for error handling purposes
+        //with while loop user won't need to start adding the details of the item from the beginning
+        while (!validDate) {
             System.out.print("Best-before (YYYY-MM-DD, max 2 weeks): ");
             String dateInput = sc.nextLine();
 
