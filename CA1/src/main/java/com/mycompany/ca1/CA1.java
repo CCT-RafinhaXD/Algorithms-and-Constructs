@@ -16,16 +16,21 @@ public class CA1 {
 
     public static void main(String[] args) {
 
+        //implemented scanner to read user input
 
         Scanner sc = new Scanner(System.in);
 
         // Array: [name, weight, best-before, storage time]
         String[][] storage = new String[5][4];
+        // Array: [maximum 8 trays][name, weight, best-before, storage time]
+        String[][] storage = new String[8][4];
 
+        //prompt for user to add items
         System.out.print("How many items do you want to store? ");
         int n = sc.nextInt();
         sc.nextLine(); // clear buffer
 
+        //added a for loop to enter name, weight, bb, storage time of each item
         for (int i = 0; i < n; i++) {
 
             System.out.println("\nEnter details for item " + (i + 1));
@@ -84,6 +89,8 @@ public class CA1 {
 
             // Store current time automatically
             storage[i][3] = LocalDateTime.now().toString();
+        // Store current time automatically
+        storage[i][3] = LocalDateTime.now().toString();
         }
 
         // Display stored items
