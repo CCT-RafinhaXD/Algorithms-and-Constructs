@@ -49,12 +49,36 @@ public class CA1 {
             String dateInput = sc.nextLine();
 
             LocalDate date = LocalDate.parse(dateInput);
+        
+        //added try-catch to prompt user in case of errors
+        try {
+            
+            //converts user input into a real local calendar date
+            expiryDate = LocalDate.parse(dateInput);
 
             // Check 2-week limit
             if (date.isAfter(LocalDate.now().plusWeeks(2))) {
                 System.out.println("⚠ Invalid date! Setting to max 2 weeks.");
                 date = LocalDate.now().plusWeeks(2);
+            if (expiryDate.isAfter(LocalDate.now().plusWeeks(2))) {
+            System.out.println("⚠ Invalid date! The maximum limit is 2 weeks from today. Try again.");
+            
+            //check 
+            } else if (expiryDate.isBefore(LocalDate.now())) {
+            System.out.println("⚠ Invalid date! The food cannot already be expired. Try again.");
+            
+            //get user out of the loop when the date meets the requirments
+            } else {
+            validDate = true; 
             }
+            
+        //Check if user types numbers, special characters and invalid format
+        } catch (Exception e) {
+        System.out.println("⚠ Invalid format! Please use YYYY-MM-DD.");
+        }
+    }
+        //Converts the date into string so it can be stored in array
+        storage[i][2] = expiryDate.toString();
 
             storage[i][2] = date.toString();
 
