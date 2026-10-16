@@ -90,6 +90,21 @@ public class CA1 {
             System.out.println("Best Before: " + storage[i][2]);
             System.out.println("Stored At: " + storage[i][3]);
         }
+        
+System.out.print("\nEnter food name to search: ");
+String foodName = sc.nextLine();
+
+int position = FoodSearch.search(storage, foodName);
+
+if (position != -1) {
+    System.out.println("Food found!");
+    System.out.println("Name: " + storage[position][0]);
+    System.out.println("Weight: " + storage[position][1] + "g");
+    System.out.println("Best Before: " + storage[position][2]);
+    System.out.println("Stored At: " + storage[position][3]);
+} else {
+    System.out.println("Food not found.");
+}
 
         sc.close();
 
