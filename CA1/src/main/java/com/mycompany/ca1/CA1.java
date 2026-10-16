@@ -17,11 +17,8 @@ public class CA1 {
     public static void main(String[] args) {
 
         //implemented scanner to read user input
+        Scanner sc = new Scanner(System.in); 
 
-        Scanner sc = new Scanner(System.in);
-
-        // Array: [name, weight, best-before, storage time]
-        String[][] storage = new String[5][4];
         // Array: [maximum 8 trays][name, weight, best-before, storage time]
         String[][] storage = new String[8][4];
 
@@ -52,8 +49,6 @@ public class CA1 {
         while (!validDate) {
             System.out.print("Best-before (YYYY-MM-DD, max 2 weeks): ");
             String dateInput = sc.nextLine();
-
-            LocalDate date = LocalDate.parse(dateInput);
         
         //added try-catch to prompt user in case of errors
         try {
@@ -62,9 +57,6 @@ public class CA1 {
             expiryDate = LocalDate.parse(dateInput);
 
             // Check 2-week limit
-            if (date.isAfter(LocalDate.now().plusWeeks(2))) {
-                System.out.println("⚠ Invalid date! Setting to max 2 weeks.");
-                date = LocalDate.now().plusWeeks(2);
             if (expiryDate.isAfter(LocalDate.now().plusWeeks(2))) {
             System.out.println("⚠ Invalid date! The maximum limit is 2 weeks from today. Try again.");
             
@@ -85,10 +77,6 @@ public class CA1 {
         //Converts the date into string so it can be stored in array
         storage[i][2] = expiryDate.toString();
 
-            storage[i][2] = date.toString();
-
-            // Store current time automatically
-            storage[i][3] = LocalDateTime.now().toString();
         // Store current time automatically
         storage[i][3] = LocalDateTime.now().toString();
         }
