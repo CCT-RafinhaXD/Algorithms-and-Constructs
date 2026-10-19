@@ -4,10 +4,26 @@
  */
 package com.mycompany.ca1;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 /**
  *
  * @author sara_
  */
 public class FoodItem {
     
+    //Properties of the Food Item
+    private String name;
+    private double weight;
+    private LocalDate bestBefore;
+    private LocalDateTime storedAt;
+    
+    //Contructor of Food Item 
+    public FoodItem(String name, double weight, LocalDate bestBefore) {
+        this.name = name;
+        this.weight = weight;
+        this.bestBefore = bestBefore;
+        this.storedAt = LocalDateTime.now();
+    }
 }
