@@ -26,4 +26,30 @@ public class FoodItem {
         this.bestBefore = bestBefore;
         this.storedAt = LocalDateTime.now();
     }
+
+    //Getters of Food Item
+    public String getName() {
+        return name;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
+
+    public LocalDate getBestBefore() {
+        return bestBefore;
+    }
+
+    public LocalDateTime getStoredAt() {
+        return storedAt;
+    }
+
+    //prints the details of the food item
+    public void display() {
+        System.out.println("----------------------");
+        System.out.println("Name: " + name);
+        System.out.println("Weight: " + weight + "g");
+        System.out.println("Best Before: " + bestBefore);
+        System.out.println("Stored At: " + storedAt);
+    }
 }

@@ -5,7 +5,6 @@
 package com.mycompany.ca1;
 import java.util.Scanner;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 /**
  *
@@ -17,30 +16,105 @@ public class CA1 {
     public static void main(String[] args) {
 
         //implemented scanner to read user input
-        Scanner sc = new Scanner(System.in); 
+        Scanner sc = new Scanner(System.in);
 
-        // Array: [maximum 8 trays][name, weight, best-before, storage time]
-        String[][] storage = new String[8][4];
+        //the five types of food the restaurant provides
+        String[] foodTypes = {"Burger", "Pizza", "Fries", "Sandwich", "Hotdog"};
 
-        //prompt for user to add items
-        System.out.print("How many items do you want to store? ");
-        int n = sc.nextInt();
-        sc.nextLine(); // clear buffer
+        //maximum 8 trays in the storage
+        SingleStack.Stack stack = new SingleStack.Stack(8);
+        CircularQueue queue = new CircularQueue(8);
 
-        //added a for loop to enter name, weight, bb, storage time of each item
-        for (int i = 0; i < n; i++) {
+        //user chooses how the chef uses the storage
+        int mode = 0;
+        while (mode != 1 && mode != 2) {
+            System.out.println("How will the chef use the storage?");
+            System.out.println("1. Front side to add and remove (Stack)");
+            System.out.println("2. Front side to add, opposite side to remove (Queue)");
+            System.out.print("Enter your choice: ");
 
-            System.out.println("\nEnter details for item " + (i + 1));
+            //added try-catch in case user types letters
+            try {
+                mode = sc.nextInt();
+                sc.nextLine(); // clear buffer
+                if (mode != 1 && mode != 2) {
+                    System.out.println("⚠ Invalid choice! Please enter 1 or 2.");
+                }
+            } catch (Exception e) {
+                sc.nextLine(); // clear buffer
+                System.out.println("⚠ Invalid input! Please enter a number.");
+            }
+        }
 
-            System.out.print("Name: ");
-            storage[i][0] = sc.nextLine();
+        //menu loop runs until the user chooses to exit
+        while (true) {
+            System.out.println("\n--- Food Storage Menu ---");
+            System.out.println("1. Add food item");
+            System.out.println("2. Remove food item");
+            System.out.println("3. Show food item at the top");
+            System.out.println("4. Display all food items");
+            System.out.println("5. Search food item");
+            System.out.println("6. Exit");
+            System.out.print("Enter your choice: ");
 
-            System.out.print("Weight (grams): ");
-            storage[i][1] = sc.nextLine();
+            int choice = 0;
+            //added try-catch in case user types letters
+            try {
+                choice = sc.nextInt();
+                sc.nextLine(); // clear buffer
+            } catch (Exception e) {
+                sc.nextLine(); // clear buffer
+                System.out.println("⚠ Invalid input! Please enter a number.");
+                continue;
+            }
+
+            switch (choice) {
+                case 1:
+                    //check if the storage is full before asking for the details
+                    if ((mode == 1 && stack.isFull()) || (mode == 2 && queue.isFull())) {
+                        System.out.println("⚠ Storage is full! The maximum is 8 trays.");
+                        break;
+                    }
+
+                    //name must be one of the five food types
+                    String name = "";
+                    boolean validName = false;
+                    while (!validName) {
+                        System.out.print("Name (Burger, Pizza, Fries, Sandwich, Hotdog): ");
+                        String nameInput = sc.nextLine();
+                        for (int i = 0; i < foodTypes.length; i++) {
+                            if (foodTypes[i].equalsIgnoreCase(nameInput)) {
+                                name = foodTypes[i];
+                                validName = true;
+                            }
+                        }
+                        if (!validName) {
+                            System.out.println("⚠ Invalid food! Choose Burger, Pizza, Fries, Sandwich or Hotdog.");
+                        }
+                    }
+
+                    //weight must be a number greater than 0
+                    double weight = 0;
+                    boolean validWeight = false;
+                    while (!validWeight) {
+                        System.out.print("Weight (grams): ");
+                        try {
+                            weight = sc.nextDouble();
+                            sc.nextLine(); // clear buffer
+                            if (weight > 0) {
+                                validWeight = true;
+                            } else {
+                                System.out.println("⚠ Invalid weight! It must be greater than 0.");
+                            }
+                        } catch (Exception e) {
+                            sc.nextLine(); // clear buffer
+                            System.out.println("⚠ Invalid weight! Please enter a number.");
+                        }
+                    }
 
         //declare the variable for expiry date initializing it from today.
         LocalDate expiryDate = LocalDate.now();
-        
+
         //set the valid date as false so user can set it inside of the loop
         boolean validDate = false;
 
@@ -49,52 +123,104 @@ public class CA1 {
         while (!validDate) {
             System.out.print("Best-before (YYYY-MM-DD, max 2 weeks): ");
             String dateInput = sc.nextLine();
-        
+
         //added try-catch to prompt user in case of errors
         try {
-            
+
             //converts user input into a real local calendar date
             expiryDate = LocalDate.parse(dateInput);
 
             // Check 2-week limit
             if (expiryDate.isAfter(LocalDate.now().plusWeeks(2))) {
             System.out.println("⚠ Invalid date! The maximum limit is 2 weeks from today. Try again.");
-            
-            //check 
+
+            //check
             } else if (expiryDate.isBefore(LocalDate.now())) {
             System.out.println("⚠ Invalid date! The food cannot already be expired. Try again.");
-            
+
             //get user out of the loop when the date meets the requirments
             } else {
-            validDate = true; 
+            validDate = true;
             }
-            
+
         //Check if user types numbers, special characters and invalid format
         } catch (Exception e) {
         System.out.println("⚠ Invalid format! Please use YYYY-MM-DD.");
         }
     }
-        //Converts the date into string so it can be stored in array
-        storage[i][2] = expiryDate.toString();
 
-        // Store current time automatically
-        storage[i][3] = LocalDateTime.now().toString();
+                    //create the food item (storage time is stored automatically)
+                    FoodItem item = new FoodItem(name, weight, expiryDate);
+                    if (mode == 1) {
+                        stack.push(item);
+                    } else {
+                        queue.enqueue(item);
+                    }
+                    break;
+
+                case 2:
+                    if (mode == 1) {
+                        FoodItem removed = stack.pop();
+                        if (removed != null) {
+                            System.out.println(removed.getName() + " removed from the storage.");
+                        }
+                    } else {
+                        queue.dequeue();
+                    }
+                    break;
+
+                case 3:
+                    if (mode == 1) {
+                        FoodItem top = stack.peek();
+                        if (top != null) {
+                            System.out.println("Item at the top: " + top.getName());
+                            top.display();
+                        }
+                    } else {
+                        queue.peek();
+                    }
+                    break;
+
+                case 4:
+                    if (mode == 1) {
+                        stack.display();
+                    } else {
+                        queue.display();
+                    }
+                    break;
+
+                case 5:
+                    if ((mode == 1 && stack.isEmpty()) || (mode == 2 && queue.isEmpty())) {
+                        System.out.println("⚠ Storage is empty! There is nothing to search.");
+                        break;
+                    }
+                    System.out.print("Enter food name to search: ");
+                    String foodName = sc.nextLine();
+
+                    FoodItem found;
+                    if (mode == 1) {
+                        found = stack.search(foodName);
+                    } else {
+                        found = queue.search(foodName);
+                    }
+
+                    if (found != null) {
+                        System.out.println("Food found!");
+                        found.display();
+                    } else {
+                        System.out.println("Food not found.");
+                    }
+                    break;
+
+                case 6:
+                    System.out.println("Exiting the application.");
+                    sc.close();
+                    return;
+
+                default:
+                    System.out.println("⚠ Invalid choice! Please enter a number from 1 to 6.");
+            }
         }
-
-        // Display stored items
-        System.out.println("\nStored Food Items:");
-        for (int i = 0; i < n; i++) {
-            System.out.println("----------------------");
-            System.out.println("Name: " + storage[i][0]);
-            System.out.println("Weight: " + storage[i][1] + "g");
-            System.out.println("Best Before: " + storage[i][2]);
-            System.out.println("Stored At: " + storage[i][3]);
-        }
-
-        sc.close();
-
-       
-
     }
 }
 
